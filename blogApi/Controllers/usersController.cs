@@ -123,7 +123,6 @@ namespace blogApi.Controllers
         [Route("create")]
         public async Task<IActionResult> CreateUserAsync(UserWriteDTO user)
         {
-
                 try
                 {
                     var userInfo = new users();
