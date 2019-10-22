@@ -1,0 +1,44 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="DAL\LoginRepositories\LoginRepository\**" />
+    <Compile Remove="DAL\Post\PostRepository\**" />
+    <Content Remove="DAL\LoginRepositories\LoginRepository\**" />
+    <Content Remove="DAL\Post\PostRepository\**" />
+    <EmbeddedResource Remove="DAL\LoginRepositories\LoginRepository\**" />
+    <EmbeddedResource Remove="DAL\Post\PostRepository\**" />
+    <None Remove="DAL\LoginRepositories\LoginRepository\**" />
+    <None Remove="DAL\Post\PostRepository\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Remove="Controllers\users.cs" />
+    <Compile Remove="DAL\BaseContext.cs" />
+    <Compile Remove="DAL\LoginRepositories\LoginContext.cs" />
+    <Compile Remove="DAL\LoginRepositories\LoginUOW.cs" />
+    <Compile Remove="Entities\UserDbContext.cs" />
+    <Compile Remove="Interfaces\IUnitOfWork.cs" />
+    <Compile Remove="WeatherForecast.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.0.0" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="3.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
+    <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="DAL\Post\" />
+  </ItemGroup>
+
+</Project>
