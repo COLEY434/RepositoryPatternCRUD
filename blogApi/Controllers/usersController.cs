@@ -132,7 +132,7 @@ namespace blogApi.Controllers
                     userInfo.surname = user.surname;
                     userInfo.state = user.state;
                     userInfo.gender = user.gender;
-                    userInfo.age = user.age;
+                    userInfo.age = user.age; 
                     userInfo.created_at = DateTime.Now;
 
                     uow.user.Create(userInfo);
