@@ -25,11 +25,24 @@ namespace blogApi
             Configuration = configuration;
         }
 
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+
         public IConfiguration Configuration { get; }
 
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(MyAllowSpecificOrigins,
+                builder =>
+                {
+                    //builder.WithOrigins("http://localhost:8080",
+                    //                    "http://www.contoso.com").AllowAnyHeader().AllowAnyMethod();
+
+                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                });
+            });
             services.AddControllers();
             services.AddDbContext<RepositoryContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("PostDatabase")));
@@ -45,11 +58,15 @@ namespace blogApi
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseHttpsRedirection();
 
             app.UseRouting();
 
             app.UseAuthorization();
+           
+
+
 
             app.UseEndpoints(endpoints =>
             {

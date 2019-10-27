@@ -9,6 +9,7 @@ using blogApi.Entities;
 using blogApi.DTOS.WriteDTO;
 using blogApi.DAL.Login;
 using blogApi.Interfaces;
+using Microsoft.AspNetCore.Cors;
 
 namespace blogApi.Controllers
 {
@@ -120,9 +121,14 @@ namespace blogApi.Controllers
 
         // Creates the user record
         [HttpPost]
+        
         [Route("create")]
         public async Task<IActionResult> CreateUserAsync(UserWriteDTO user)
         {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new { error = true });
+            }
                 try
                 {
                     var userInfo = new users();
@@ -133,6 +139,8 @@ namespace blogApi.Controllers
                     userInfo.gender = user.gender;
                     userInfo.age = user.age; 
                     userInfo.created_at = DateTime.Now;
+                userInfo.email = user.email;
+                userInfo.password = user.password;
 
                     uow.user.Create(userInfo);
                     await uow.save();
@@ -148,7 +156,37 @@ namespace blogApi.Controllers
 
 
 
+        [Route("login")]
+        public async Task<IActionResult> AuthUserAsync(UserWriteDTO user)
+        {
+            if (!ModelState.IsValid)
+            {
+                return Ok(new { error = true });
+            }
+            try
+            {
+                var userInfo = new users();
 
+                userInfo.firstname = user.firstname;
+                userInfo.surname = user.surname;
+                userInfo.state = user.state;
+                userInfo.gender = user.gender;
+                userInfo.age = user.age;
+                userInfo.created_at = DateTime.Now;
+                userInfo.email = user.email;
+                userInfo.password = user.password;
+
+                uow.user.Create(userInfo);
+                await uow.save();
+
+                return Ok(new { success = true });
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+
+        }
 
 
 

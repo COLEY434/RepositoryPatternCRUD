@@ -33,5 +33,11 @@ namespace blogApi.Entities
         public DateTime created_at { get; set; }
 
         public DateTime? updated_at { get; set; }
+        
+        [Required]
+        public string email { get; set; }
+
+        [Required]
+        public string password { get; set; }
     }
 }

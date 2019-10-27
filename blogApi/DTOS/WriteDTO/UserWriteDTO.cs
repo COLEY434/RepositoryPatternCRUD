@@ -27,5 +27,11 @@ namespace blogApi.DTOS.WriteDTO
 
         public int age { get; set; }
 
+        [Required]
+        public string email { get; set; }
+
+        [Required]
+        public string password { get; set; }
+
     }
 }
