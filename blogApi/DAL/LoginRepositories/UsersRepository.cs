@@ -33,6 +33,8 @@ namespace blogApi.DAL.Login.LoginRepository
             return result;
         }
 
+
+        //Method for authenticating the user
         public async Task<loginId> ValidateUser(string password, string email)
         {
             var result = await FindByCondition(x => x.email == email && x.password == password)
