@@ -154,7 +154,7 @@ namespace blogApi.Controllers
 
         }
 
-
+        //Route for authenticating the user
         [HttpPost]
         [Route("login")]
         public async Task<IActionResult> AuthUserAsync(LoginWriteDTO model)
