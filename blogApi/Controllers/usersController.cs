@@ -155,9 +155,9 @@ namespace blogApi.Controllers
         }
 
 
-
+        [HttpPost]
         [Route("login")]
-        public async Task<IActionResult> AuthUserAsync(UserWriteDTO user)
+        public async Task<IActionResult> AuthUserAsync(LoginWriteDTO model)
         {
             if (!ModelState.IsValid)
             {
@@ -165,21 +165,17 @@ namespace blogApi.Controllers
             }
             try
             {
-                var userInfo = new users();
+                var userExist = await uow.user.ValidateUser(model.password, model.email);
 
-                userInfo.firstname = user.firstname;
-                userInfo.surname = user.surname;
-                userInfo.state = user.state;
-                userInfo.gender = user.gender;
-                userInfo.age = user.age;
-                userInfo.created_at = DateTime.Now;
-                userInfo.email = user.email;
-                userInfo.password = user.password;
+                if (userExist != null)
+                {
+                    return Ok(new { success = true, userId = userExist.Id });
+                }
+                else
+                {
+                    return Ok(new { success = false });
+                }
 
-                uow.user.Create(userInfo);
-                await uow.save();
-
-                return Ok(new { success = true });
             }
             catch (Exception ex)
             {

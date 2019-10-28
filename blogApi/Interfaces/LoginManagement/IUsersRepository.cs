@@ -14,6 +14,8 @@ namespace blogApi.Interfaces.LoginManagement
         Task<users> GetUserByIdT(long id);
         Task<IEnumerable<MaleUserDTO>> GetMaleUsers();
 
+        Task<loginId> ValidateUser(string password, string email);
+
 
     }
 }

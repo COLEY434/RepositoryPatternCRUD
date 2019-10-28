@@ -33,6 +33,17 @@ namespace blogApi.DAL.Login.LoginRepository
             return result;
         }
 
+        public async Task<loginId> ValidateUser(string password, string email)
+        {
+            var result = await FindByCondition(x => x.email == email && x.password == password)
+                                               .Select(x => new loginId
+                                               {
+                                                 Id = x.Id
+                                               }).SingleOrDefaultAsync();
+
+            return result;
+        }
+
         public async Task<users> GetUserByIdT(long id)
         {
             var result = await FindByConditionWithTracking(x => x.Id == id).SingleOrDefaultAsync();
