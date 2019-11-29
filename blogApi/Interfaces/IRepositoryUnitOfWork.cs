@@ -9,6 +9,7 @@ namespace blogApi.Interfaces
     public interface IRepositoryUnitOfWork
     {
         IUsersRepository user { get; }
+        IPostRepository post { get; }
         Task save();
     }
 }

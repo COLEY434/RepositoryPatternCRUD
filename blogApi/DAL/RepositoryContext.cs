@@ -1,4 +1,5 @@
-﻿using blogApi.Entities;
+﻿using blogApi.DTOS.ReadDTO;
+using blogApi.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -14,6 +15,21 @@ namespace blogApi.DAL
         }
 
         public DbSet<users> users { get; set; }
+        public DbSet<posts> posts { get; set; }
+
+        public DbSet<GetPostReadDTO> GetPostReadDTOs { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder
+                .Entity<GetPostReadDTO>(options => 
+                {
+                    options.HasNoKey();
+                    options.ToView("get_posts");
+                
+                });
+        }
     }
 }
+
  

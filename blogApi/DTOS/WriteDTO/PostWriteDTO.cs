@@ -6,14 +6,12 @@ using System.Threading.Tasks;
 
 namespace blogApi.DTOS.WriteDTO
 {
-    public class UserWriteDTO
+    public class PostWriteDTO
     {
+        [Required]
+        public int user_Id { get; set; }
 
         [Required]
-        public string email { get; set; }
-
-        [Required]
-        public string password { get; set; }
-
+        public string message { get; set; }
     }
 }

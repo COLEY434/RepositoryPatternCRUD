@@ -6,19 +6,18 @@ using System.Threading.Tasks;
 
 namespace blogApi.Entities
 {
-    public class posts
+    public class Likes
     {
         [Key]
         public int Id { get; set; }
 
         [Required]
-        public int user_id { get; set; }
-         
-        [Required]
-        public string message { get; set; }
+        public int user_Id { get; set; }
 
         [Required]
-        public DateTime created_at { get; set; }
+        public int post_Id { get; set; }
+
+        public bool? liked { get; set; }
 
         public DateTime? updated_at { get; set; }
     }

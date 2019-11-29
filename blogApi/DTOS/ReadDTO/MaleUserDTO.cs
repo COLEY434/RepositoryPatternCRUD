@@ -11,7 +11,7 @@ namespace blogApi.DTOS.ReadDTO
 
         public string gender { get; set; }
 
-        public int age { get; set; }
+        public int? age { get; set; }
 
         public string firstname { get; set; }
     }
