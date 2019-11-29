@@ -37,10 +37,9 @@ namespace blogApi
                 options.AddPolicy(MyAllowSpecificOrigins,
                 builder =>
                 {
-                    //builder.WithOrigins("http://localhost:8080",
-                    //                    "http://www.contoso.com").AllowAnyHeader().AllowAnyMethod();
+                    builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod();
 
-                    builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    //builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
                 });
             });
             services.AddControllers();

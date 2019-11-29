@@ -17,6 +17,7 @@
 
   <ItemGroup>
     <Compile Remove="Controllers\users.cs" />
+    <Compile Remove="Controllers\WeatherForecastController.cs" />
     <Compile Remove="DAL\BaseContext.cs" />
     <Compile Remove="DAL\LoginRepositories\LoginContext.cs" />
     <Compile Remove="DAL\LoginRepositories\LoginUOW.cs" />
@@ -35,10 +36,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="3.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.0.0" />
     <PackageReference Include="System.Configuration.ConfigurationManager" Version="4.6.0" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="DAL\Post\" />
   </ItemGroup>
 
 </Project>
