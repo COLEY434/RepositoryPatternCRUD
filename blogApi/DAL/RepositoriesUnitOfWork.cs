@@ -1,4 +1,5 @@
 ﻿using blogApi.DAL.Login.LoginRepository;
+using blogApi.DAL.Post;
 using blogApi.Interfaces;
 using blogApi.Interfaces.LoginManagement;
 using System;
@@ -12,6 +13,7 @@ namespace blogApi.DAL
     {
         private readonly RepositoryContext RepositoryContext;
         private IUsersRepository _user;
+        private IPostRepository _post;
 
 
         public RepositoriesUnitOfWork(RepositoryContext repositoryContext)
@@ -30,6 +32,19 @@ namespace blogApi.DAL
                 return _user;
             } }
 
+        public IPostRepository post
+        {
+            get
+            {
+                if(_post == null)
+                {
+                    _post = new PostRepository(RepositoryContext);
+                }
+                return _post;
+            }
+        }
+
+       
         public async Task save()
         {
             await RepositoryContext.SaveChangesAsync();
