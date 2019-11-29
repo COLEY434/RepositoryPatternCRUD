@@ -22,10 +22,10 @@ namespace blogApi.Controllers
         {
             uow = unitOfWork;
         }
+       
 
-
-       // Gets all users 
-       [HttpGet]
+        // Gets all users 
+        [HttpGet]
         public async Task<IActionResult> GetUsersAsync()
         {
             try
@@ -90,63 +90,80 @@ namespace blogApi.Controllers
 
         // updates the user record
         [HttpPut("update/{id}")]
-        public async Task<IActionResult> UpdateUsersAsync(long id, UserWriteDTO user)
-        {
-            try
-            {
-                var users = await uow.user.GetUserByIdT(id);
-                if (users != null)
-                {
+        //public async Task<IActionResult> UpdateUsersAsync(long id, UserWriteDTO user)
+        //{
+        //    try
+        //    {
+        //        var users = await uow.user.GetUserByIdT(id);
+        //        if (users != null)
+        //        {
 
-                    users.firstname = user.firstname;
-                    users.surname = user.surname;
-                    users.state = user.state;
-                    users.gender = user.gender;
-                    users.age = user.age;
-                    users.updated_at = DateTime.Now;
+        //            users.firstname = user.firstname;
+        //            users.surname = user.surname;
+        //            users.state = user.state;
+        //            users.gender = user.gender;
+        //            users.age = user.age;
+        //            users.updated_at = DateTime.Now;
 
-                    uow.user.Update(users);
-                    await uow.save();
+        //            uow.user.Update(users);
+        //            await uow.save();
 
-                    return Ok(new { success = true });
-                }
+        //            return Ok(new { success = true });
+        //        }
 
-                return Ok(new { success = false, Message = "Failed to update"});
-            }
-            catch (Exception ex)
-            {
-                return Ok(ex.Message);
-            }
-        }
+        //        return Ok(new { success = false, Message = "Failed to update"});
+        //    }
+        //    catch (Exception ex)
+        //    {
+        //        return Ok(ex.Message);
+        //    }
+        //}
 
         // Creates the user record
         [HttpPost]
-        
         [Route("create")]
         public async Task<IActionResult> CreateUserAsync(UserWriteDTO user)
         {
             if (!ModelState.IsValid)
             {
-                return Ok(new { error = true });
+                return BadRequest(ModelState);
             }
                 try
                 {
+                var checkIfUserExist = await uow.user.ValidateUser(user.password, user.email);
+
+                if(checkIfUserExist == null)
+                {
                     var userInfo = new users();
 
-                    userInfo.firstname = user.firstname;
-                    userInfo.surname = user.surname;
-                    userInfo.state = user.state;
-                    userInfo.gender = user.gender;
-                    userInfo.age = user.age; 
+                    userInfo.firstname = null;
+                    userInfo.surname = null;
+                    userInfo.state = null;
+                    userInfo.gender = null;
+                    userInfo.age = null;
                     userInfo.created_at = DateTime.Now;
-                userInfo.email = user.email;
-                userInfo.password = user.password;
+                    userInfo.updated_at = null;
+                    userInfo.email = user.email;
+                    userInfo.password = user.password;
+                    userInfo.img_url = null;
+                    userInfo.last_logged_In = null;
+                    userInfo.country = null;
+                    userInfo.username = null;
 
                     uow.user.Create(userInfo);
                     await uow.save();
-                
-                    return Ok(new { success = true });
+
+
+                    var userExist = await uow.user.ValidateUser(user.password, user.email);
+
+                    if (userExist != null)
+                    {
+                        return Ok(new { success = true, userId = userExist.Id });
+                    }
+                    // return Ok(new { success = true, message = "Logged in successful" });
                 }
+                return Ok(new { success = false, message = "User account exist" });
+            }
                 catch (Exception ex)
                 {
                     return Ok(ex.Message);
