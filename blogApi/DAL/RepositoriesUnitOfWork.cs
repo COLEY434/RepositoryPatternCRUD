@@ -14,6 +14,7 @@ namespace blogApi.DAL
         private readonly RepositoryContext RepositoryContext;
         private IUsersRepository _user;
         private IPostRepository _post;
+        private IReplyPostRepository _replies;
 
 
         public RepositoriesUnitOfWork(RepositoryContext repositoryContext)
@@ -21,8 +22,17 @@ namespace blogApi.DAL
             this.RepositoryContext = repositoryContext;
         }
 
+       public IReplyPostRepository Replies {
+            get { 
+                if(_replies == null)
+                {
+                    _replies = new ReplyPostRepository(RepositoryContext);
+                }
+                return _replies;
+            }
+        }
 
-        public IUsersRepository user { 
+        public IUsersRepository User { 
             get {
                 if(_user == null)
                 {
@@ -32,7 +42,7 @@ namespace blogApi.DAL
                 return _user;
             } }
 
-        public IPostRepository post
+        public IPostRepository Post
         {
             get
             {
