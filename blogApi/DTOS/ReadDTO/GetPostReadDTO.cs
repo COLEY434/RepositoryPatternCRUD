@@ -21,5 +21,7 @@ namespace blogApi.DTOS.ReadDTO
         public DateTime date_posted { get; set; }
 
         public DateTime? date_updated { get; set; }
+
+        public int userId { get; set; }
     }
 }
