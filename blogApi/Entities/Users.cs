@@ -9,7 +9,7 @@ namespace blogApi.Entities
     public class users
     {
         [Key]
-        public int Id { get; set; }
+        public int userId { get; set; }
 
         [MaxLength(20)]
         public string surname { get; set; }
