@@ -17,11 +17,7 @@ namespace blogApi.DAL
         public DbSet<users> users { get; set; }
         public DbSet<posts> posts { get; set; }
 
-        public DbSet<Replies> Replies { get; set; }
-
         public DbSet<GetPostReadDTO> GetPostReadDTOs { get; set; }
-
-        public DbSet<GetPostReadDTO> GetPostReadDto { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -30,14 +26,7 @@ namespace blogApi.DAL
                 {
                     options.HasNoKey();
                     options.ToView("get_posts");
-                });
-            modelBuilder
-                .Entity<GetPostReadDTOs>(options =>
-                {
-                    options.HasNoKey();
-                    options.ToTable("get_posts_single");
-
-
+                
                 });
         }
     }

@@ -23,20 +23,5 @@ namespace blogApi.DAL.Post
                  
             return result;
         }
-
-        public async Task<GetPostReadDTO> GetPostsByIdSingle(int Id)
-        {
-            var postId = Id;
-
-            var result = await context.GetPostReadDto.FromSqlRaw("select * from dbo.get_posts_single({0})", postId).SingleOrDefaultAsync();
-            return result;
-        }
-
-        public async Task<posts> GetPostById(int Id)
-        {
-            var result = await FindByConditionWithTracking(x => x.Id == Id).SingleOrDefaultAsync();
-
-            return result;
-        }
     }
 }

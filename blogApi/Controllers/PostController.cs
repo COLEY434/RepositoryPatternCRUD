@@ -24,10 +24,10 @@ namespace blogApi.Controllers
         [HttpGet]
         [Route("get-posts")]
         public async Task<IActionResult> GetPostsAsync()
-      {
+        {
             try
             {
-                var AllPost = await uow.Post.GetPostsAsync();
+                var AllPost = await uow.post.GetPostsAsync();
 
                 return Ok(AllPost);
             }
@@ -39,68 +39,14 @@ namespace blogApi.Controllers
         }
 
         // GET: api/Post/5
-        [HttpPut("update")]
-        public async Task<IActionResult> updatePostAsync([FromBody] PostWriteUpdateDTO model)
+        [HttpGet("{id}", Name = "Get")]
+        public string Get(int id)
         {
-            try
-            {
-                var postInfo = await uow.Post.GetPostById(model.post_Id);
-                if (postInfo == null)
-                {
-                    return Ok(new { success = true, message = "Failed to update post" });
-                }
-
-                postInfo.message = model.message;
-                postInfo.updated_at = DateTime.Now;
-                uow.Post.Update(postInfo);
-                await uow.save();
-
-                var newPostInfo = await uow.Post.GetPostsByIdSingle(model.post_Id);
-
-                return Ok(new { success = true, message = "Post Updated successfully", userInfo = newPostInfo });
-
-            }
-            catch (Exception ex)
-            {
-                return Ok(ex.Message);
-            }
-            
-
-           
-
-        }
-
-        [HttpPost]
-        [Route("reply/create")]
-        public async Task<IActionResult> createPostRepliesAsync([FromBody] PostRepliesWriteDTO model)
-        {
-            if (!ModelState.IsValid)
-            {
-                return BadRequest(ModelState);
-            }
-
-            try
-            {
-                var ReplyData = new Replies();
-                ReplyData.user_Id = model.user_Id;
-                ReplyData.post_Id = model.post_Id;
-                ReplyData.reply_message = model.message;
-                ReplyData.created_at = DateTime.Now;
-                ReplyData.updated_at = null;
-
-                uow.Replies.Create(ReplyData);
-                await uow.save();
-
-                return Ok(new { success = true, message = "Reply sent successfully"});
-            }
-            catch (Exception ex)
-            {
-                return Ok(ex.Message);
-            }
+            return "value";
         }
 
         // POST: api/Post/create
-
+        
         [HttpPost]
         [Route("create")]
         public async Task<IActionResult> createPostAsync(PostWriteDTO model)
@@ -118,7 +64,7 @@ namespace blogApi.Controllers
                     postData.created_at = DateTime.Now;
                     postData.updated_at = null;
 
-                uow.Post.Create(postData);
+                uow.post.Create(postData);
                 await uow.save();
 
                 return Ok(new { success = true });

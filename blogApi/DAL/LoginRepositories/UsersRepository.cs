@@ -28,7 +28,7 @@ namespace blogApi.DAL.Login.LoginRepository
 
         public async Task<users> GetUserById(long id)
         {
-            var result = await FindByCondition(x => x.userId == id).SingleOrDefaultAsync();
+            var result = await FindByCondition(x => x.Id == id).SingleOrDefaultAsync();
 
             return result;
         }
@@ -40,7 +40,7 @@ namespace blogApi.DAL.Login.LoginRepository
             var result = await FindByCondition(x => x.email == email && x.password == password)
                                                .Select(x => new loginId
                                                {
-                                                 Id = x.userId
+                                                 Id = x.Id
                                                }).SingleOrDefaultAsync();
 
             return result;
@@ -48,7 +48,7 @@ namespace blogApi.DAL.Login.LoginRepository
 
         public async Task<users> GetUserByIdT(long id)
         {
-            var result = await FindByConditionWithTracking(x => x.userId == id).SingleOrDefaultAsync();
+            var result = await FindByConditionWithTracking(x => x.Id == id).SingleOrDefaultAsync();
 
             return result;
         }
@@ -59,7 +59,7 @@ namespace blogApi.DAL.Login.LoginRepository
             var result = await FindByCondition(x => x.gender == male)
                 .Select(x => new MaleUserDTO
                 {
-                    Id = x.userId,
+                    Id = x.Id,
                     gender = x.gender,
                     age = x.age,
                     firstname = x.firstname
