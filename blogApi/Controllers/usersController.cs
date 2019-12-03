@@ -30,7 +30,7 @@ namespace blogApi.Controllers
         {
             try
             {
-                var users = await uow.user.GetAllUsersAsync();
+                var users = await uow.User.GetAllUsersAsync();
                 if (users == null)
                 {
                     return NotFound();
@@ -53,7 +53,7 @@ namespace blogApi.Controllers
         {
             try
             {
-                var users = await uow.user.GetMaleUsers();
+                var users = await uow.User.GetMaleUsers();
                 if (users == null)
                 {
                     return NotFound();
@@ -74,7 +74,7 @@ namespace blogApi.Controllers
         {
             try
             {
-                var users = await uow.user.GetUserById(id);
+                var users = await uow.User.GetUserById(id);
                 if (users == null)
                 {
                     return NotFound();
@@ -130,7 +130,7 @@ namespace blogApi.Controllers
             }
                 try
                 {
-                var checkIfUserExist = await uow.user.ValidateUser(user.password, user.email);
+                var checkIfUserExist = await uow.User.ValidateUser(user.password, user.email);
 
                 if(checkIfUserExist == null)
                 {
@@ -150,11 +150,11 @@ namespace blogApi.Controllers
                     userInfo.country = null;
                     userInfo.username = null;
 
-                    uow.user.Create(userInfo);
+                    uow.User.Create(userInfo);
                     await uow.save();
 
 
-                    var userExist = await uow.user.ValidateUser(user.password, user.email);
+                    var userExist = await uow.User.ValidateUser(user.password, user.email);
 
                     if (userExist != null)
                     {
@@ -182,7 +182,7 @@ namespace blogApi.Controllers
             }
             try
             {
-                var userExist = await uow.user.ValidateUser(model.password, model.email);
+                var userExist = await uow.User.ValidateUser(model.password, model.email);
 
                 if (userExist != null)
                 {
@@ -210,10 +210,10 @@ namespace blogApi.Controllers
         {
             try
             {
-                var users = await uow.user.GetUserByIdT(id);
+                var users = await uow.User.GetUserByIdT(id);
                 if (users != null)
                 {
-                    uow.user.Delete(users);
+                    uow.User.Delete(users);
                     await uow.save();
 
                     return Ok(new { success = true });
