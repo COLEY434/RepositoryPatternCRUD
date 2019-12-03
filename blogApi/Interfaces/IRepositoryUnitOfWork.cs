@@ -8,8 +8,10 @@ namespace blogApi.Interfaces
 {
     public interface IRepositoryUnitOfWork
     {
-        IUsersRepository user { get; }
-        IPostRepository post { get; }
+        IUsersRepository User { get; }
+        IPostRepository Post { get; }
+
+        IReplyPostRepository Replies { get; }
         Task save();
     }
 }
