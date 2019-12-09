@@ -70,7 +70,7 @@ namespace blogApi.Controllers
         // Gets users by id
         [HttpGet]
         [Route("{id}")]
-        public async Task<IActionResult> GetUserByIdAsync(long id)
+        public async Task<IActionResult> GetUserByIdAsync([FromRoute] int id)
         {
             try
             {
@@ -89,35 +89,42 @@ namespace blogApi.Controllers
         }
 
         // updates the user record
-        [HttpPut("update/{id}")]
-        //public async Task<IActionResult> UpdateUsersAsync(long id, UserWriteDTO user)
-        //{
-        //    try
-        //    {
-        //        var users = await uow.user.GetUserByIdT(id);
-        //        if (users != null)
-        //        {
+        [HttpPut("edit-profile/{id}")]
+        public async Task<IActionResult> UpdateUsersAsync([FromRoute] int id, [FromBody] UserUpdateDTO UserModel)
+        {
+            if(!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var users = await uow.User.GetUserByIdT(id);
+                if (users != null)
+                {
 
-        //            users.firstname = user.firstname;
-        //            users.surname = user.surname;
-        //            users.state = user.state;
-        //            users.gender = user.gender;
-        //            users.age = user.age;
-        //            users.updated_at = DateTime.Now;
+                    users.firstname = UserModel.Firstname;
+                    users.surname = UserModel.Surname;
+                    users.state = UserModel.State;
+                    users.gender = UserModel.Gender;
+                    users.age = UserModel.Age;
+                    users.updated_at = DateTime.Now;
+                    users.email = UserModel.Email;
+                    users.username = UserModel.Username;
+                    users.country = UserModel.Country;
 
-        //            uow.user.Update(users);
-        //            await uow.save();
+                    uow.User.Update(users);
+                    await uow.save();
 
-        //            return Ok(new { success = true });
-        //        }
+                    return Ok(new { success = true, message = "Profile Data Updated Successfully" });
+                }
 
-        //        return Ok(new { success = false, Message = "Failed to update"});
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        return Ok(ex.Message);
-        //    }
-        //}
+                return Ok(new { success = false, Message = "Failed to update" });
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+        }
 
         // Creates the user record
         [HttpPost]
@@ -206,7 +213,7 @@ namespace blogApi.Controllers
 
         //DELETE: 
         [HttpDelete("delete/{id}")]
-        public async Task<ActionResult<users>> Deleteusers(long id)
+        public async Task<ActionResult<users>> Deleteusers(int id)
         {
             try
             {
