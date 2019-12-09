@@ -26,10 +26,22 @@ namespace blogApi.DAL.Login.LoginRepository
             return result;
         }
 
-        public async Task<users> GetUserById(long id)
+        public async Task<UserReadDTO> GetUserById(int id)
         {
-            var result = await FindByCondition(x => x.userId == id).SingleOrDefaultAsync();
-
+            var result = await FindByCondition(x => x.userId == id)
+                .Select(x => new UserReadDTO
+                {
+                    userId = x.userId,
+                    surname = x.surname,
+                    firstname = x.firstname,
+                    username = x.username,
+                    gender = x.gender,
+                    state = x.state,
+                    country = x.country,
+                    age = x.age,
+                    email = x.email,
+                    img_url = x.img_url
+                }).SingleOrDefaultAsync();
             return result;
         }
 
@@ -46,7 +58,7 @@ namespace blogApi.DAL.Login.LoginRepository
             return result;
         }
 
-        public async Task<users> GetUserByIdT(long id)
+        public async Task<users> GetUserByIdT(int id)
         {
             var result = await FindByConditionWithTracking(x => x.userId == id).SingleOrDefaultAsync();
 
