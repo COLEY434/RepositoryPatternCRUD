@@ -12,5 +12,6 @@ namespace blogApi.Interfaces
         Task<List<GetPostReadDTO>> GetPostsAsync();
         Task<posts> GetPostById(int Id);
         Task<GetPostReadDTO> GetPostsByIdSingle(int Id);
+        Task<List<GetPostReadDTO>> GetCommentsAsync(int postId);
     }
 }
