@@ -38,10 +38,39 @@ namespace blogApi.Controllers
            
         }
 
+        [HttpGet]
+        [Route("get-comments/{postId}")]
+        public async Task<IActionResult> GetCommentssAsync([FromRoute] int postId)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+            try
+            {
+                var comments = await uow.Post.GetCommentsAsync(postId);
+
+                if(comments == null)
+                {
+                    return Ok(new { success = false, message = "No comments for this post"});
+                }
+                return Ok(new { success = true, comments = comments });
+            }
+            catch (Exception ex)
+            {
+                return Ok(ex.Message);
+            }
+
+        }
+
         // GET: api/Post/5
         [HttpPut("update")]
         public async Task<IActionResult> updatePostAsync([FromBody] PostWriteUpdateDTO model)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
             try
             {
                 var postInfo = await uow.Post.GetPostById(model.post_Id);
