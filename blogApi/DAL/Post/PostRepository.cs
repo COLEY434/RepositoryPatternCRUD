@@ -19,16 +19,21 @@ namespace blogApi.DAL.Post
 
         public async Task<List<GetPostReadDTO>> GetPostsAsync()
         {
-            var result = await context.GetPostReadDTOs.ToListAsync();
+            var result = await context.GetPostReadDTO.FromSqlRaw("select * from dbo.get_posts").ToListAsync();
                  
             return result;
         }
 
+        public async Task<List<GetPostReadDTO>> GetCommentsAsync(int postId)
+        {
+            var result = await context.GetPostReadDTO.FromSqlRaw("select * from dbo.get_comments({0})", postId).ToListAsync();
+            return result;
+        }
         public async Task<GetPostReadDTO> GetPostsByIdSingle(int Id)
         {
             var postId = Id;
 
-            var result = await context.GetPostReadDto.FromSqlRaw("select * from dbo.get_posts_single({0})", postId).SingleOrDefaultAsync();
+            var result = await context.GetPostReadDTO.FromSqlRaw("select * from dbo.get_posts_single({0})", postId).SingleOrDefaultAsync();
             return result;
         }
 
