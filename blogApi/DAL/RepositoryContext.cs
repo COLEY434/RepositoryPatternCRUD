@@ -19,9 +19,9 @@ namespace blogApi.DAL
 
         public DbSet<Replies> Replies { get; set; }
 
-        public DbSet<GetPostReadDTO> GetPostReadDTOs { get; set; }
+        public DbSet<GetPostReadDTO> GetPostReadDTO { get; set; }
 
-        public DbSet<GetPostReadDTO> GetPostReadDto { get; set; }
+        //public DbSet<GetPostReadDTO> GetPostReadDto { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
