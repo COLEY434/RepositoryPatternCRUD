@@ -15,6 +15,11 @@ using Microsoft.Extensions.Logging;
 using blogApi.DAL;
 using blogApi.DAL.Login;
 using blogApi.Interfaces;
+using blogApi.Settings;
+using System.Text;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using blogApi.Services;
 
 namespace blogApi
 {
@@ -32,6 +37,7 @@ namespace blogApi
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            
             services.AddCors(options =>
             {
                 options.AddPolicy(MyAllowSpecificOrigins,
@@ -39,14 +45,45 @@ namespace blogApi
                 {
                     builder.WithOrigins("http://localhost:8080").AllowAnyHeader().AllowAnyMethod();
 
-                    //builder.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader();
+                    
                 });
             });
             services.AddControllers();
             services.AddDbContext<RepositoryContext>(options =>
             options.UseSqlServer(Configuration.GetConnectionString("PostDatabase")));
 
+            var appSettingSection = Configuration.GetSection("AppSettings");
+            services.Configure<JwtSettings>(appSettingSection);
+
+            var jwtSettings = appSettingSection.Get<JwtSettings>();
+            var key = Encoding.ASCII.GetBytes(jwtSettings.Secret);
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+                .AddJwtBearer(x =>
+                {
+                    //Remove this line of code when pushing to production
+                    x.RequireHttpsMetadata = false;
+                    x.SaveToken = true;
+                    x.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(key),
+                        ValidateIssuer = false,
+                        ValidateAudience = false,
+                        ValidateLifetime = true,
+                        // ValidIssuer = "https://localhost:44318/",
+                        // ValidAudience = "http://localhost:8080/",
+                        ClockSkew = TimeSpan.Zero
+                    };
+                });
+
             services.AddScoped<IRepositoryUnitOfWork, RepositoriesUnitOfWork>();
+            services.AddScoped<IAuthenticationService, AuthenticationService>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -61,6 +98,8 @@ namespace blogApi
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+           app.UseAuthentication();
 
             app.UseAuthorization();
            
