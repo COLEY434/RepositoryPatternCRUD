@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using blogApi.DTOS.WriteDTO;
 using blogApi.Entities;
 using blogApi.Interfaces;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -12,6 +14,7 @@ namespace blogApi.Controllers
 {
     [Route("api/post")]
     [ApiController]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     public class PostController : ControllerBase
     {
         private IRepositoryUnitOfWork uow;
@@ -23,6 +26,7 @@ namespace blogApi.Controllers
         // GET: api/Post
         [HttpGet]
         [Route("get-posts")]
+        [AllowAnonymous]
         public async Task<IActionResult> GetPostsAsync()
       {
             try
