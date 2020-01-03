@@ -10,6 +10,7 @@ using blogApi.DTOS.WriteDTO;
 using blogApi.DAL.Login;
 using blogApi.Interfaces;
 using Microsoft.AspNetCore.Cors;
+using System.IO;
 
 namespace blogApi.Controllers
 {
@@ -124,6 +125,78 @@ namespace blogApi.Controllers
             {
                 return Ok(ex.Message);
             }
+        }
+
+        [HttpPost]
+        [Route("upload-image/{userId}")]
+        public async Task<IActionResult> UploadUserImageAsync([FromRoute] int userId, [FromForm] FileUpload model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
+            var User = await uow.User.GetUserByIdT(userId);
+
+            var file = model.Photo;
+            var maxSize = 5000000;
+            var fileNameAndExtension = file.FileName;
+            var fileExtension = Path.GetExtension(fileNameAndExtension);
+            var fileName = Path.GetFileNameWithoutExtension(fileNameAndExtension);
+            string[] allowedExtensions = { ".jpg", ".png", ".jpeg" };
+
+            bool isUploaded = false;
+
+            if (file.Length < maxSize)
+            {
+                if (allowedExtensions.Contains(fileExtension))
+                {
+                    var NewFileName = userId + "-Profile_Pics-" + fileName + fileExtension;
+
+                   var destinationPath = Path.Combine(@"C:\Users\user\Pictures\Images\ProfilePictures", NewFileName);
+
+                    var img_url = $"http://127.0.0.1:8887/ProfilePictures/{NewFileName}";
+
+
+
+                    using (var fileStream = new FileStream(destinationPath, FileMode.Create))
+                    {
+                        await file.CopyToAsync(fileStream);
+
+                        isUploaded = true;
+
+                        if(isUploaded)
+                        {
+                            try
+                            {
+                                User.img_url = img_url;
+                                User.updated_at = DateTime.Now;
+
+                                uow.User.Update(User);
+                                await uow.save();
+
+                                return Ok(new { success = true, message = "Image Uploaded Successfully", pic = img_url });
+                            }
+                            catch(Exception ex)
+                            {
+                                return Ok(ex.Message);
+                            }
+
+                        }
+
+
+                    }
+                }
+                return Ok(new { success = false, message = "Please only images with png and Jpg extensions are allowed" });
+            }
+            else
+            {
+                return Ok(new { success = false, message = "Please select an image less than 5 mb" });
+            }
+
+           
+
+
         }
 
         // Creates the user record
