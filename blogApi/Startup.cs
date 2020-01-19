@@ -76,7 +76,6 @@ namespace blogApi
                         ValidateIssuer = false,
                         ValidateAudience = false,
                         ValidateLifetime = true,
-                       
                         ClockSkew = TimeSpan.Zero
                     };
                 });
